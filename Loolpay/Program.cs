@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using Loolpay.Data;
+
 namespace Loolpay
 {
     public class Program
@@ -7,6 +10,10 @@ namespace Loolpay
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services.AddDbContext<Loolpay.Data.ApplicationDbContext>(options =>
+                options.UseNpgsql(connectionString));
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
