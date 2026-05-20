@@ -7,7 +7,7 @@
 | 作成日 | 2026-05-20 |
 | ステータス | レビュー前 |
 
-> 本書は現状の実装と既存設計書 [`MyFirstWebApp/doc/place-sharing-app-spec.md`](../../MyFirstWebApp/doc/place-sharing-app-spec.md) を踏まえ、追加された機能（認証 / グループ / 地図 / 画像 / 編集・削除）も含めて整理した要件定義書のドラフトです。
+
 
 ---
 
