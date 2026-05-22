@@ -7,7 +7,6 @@
 | 作成日 | 2026-05-20 |
 | ステータス | レビュー前 |
 
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 
 
 ---
@@ -45,11 +44,11 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 | ID | 機能名 | 概要 | 認証 |
 |---|---|---|---|
 | F-01 | 店舗検索 | 店舗を検索 | 要 |
-| F-02 | 店舗詳細 | 店舗の場所の詳細（写真・決済情報）を表示 | 要 |
-| F-03 | 店舗投稿 | 名前・カテゴリ・住所・メモ・決済情報・写真を投稿 | 要 |
-| F-04 | 店舗編集 |　投稿された店舗情報を編集 | 要 |
-| F-05 | 店舗削除 | 投稿された店舗情報を削除 | 要 |
-| F-06 | 店舗画像の表示 | 投稿された店舗情報の画像を表示 | 要 |
+| F-02 | 店舗詳細 | 店舗の場所の詳細（写真・決済情報）を表示 | 不要 |
+| F-03 | 店舗投稿 | 名前・住所・決済情報・写真を投稿 | 不要 |
+| F-04 | 店舗編集 |　投稿された店舗情報を編集 | 不要 |
+| F-05 | 店舗削除 | 投稿された店舗情報を削除 | 不要 |
+| F-06 | 店舗画像の表示 | 投稿された店舗情報の画像を表示 | 不要 |
 
 ### 3.2 権限ルール
 
@@ -71,7 +70,6 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 | 項目 | 内容 |
 |---|---|
 | 動作環境（サーバー） | ASP.NET Core (.NET 8) MVC |
-| 認証 | ASP.NET Core Identity（Cookie 認証） |
 | DB | PostgreSQL 16 |
 | ORM | Entity Framework Core (Npgsql) |
 | UI | Bootstrap 5 |
@@ -87,3 +85,4 @@ aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 | 改定日 | バージョン | 改訂者 | 改定箇所 | 改定内容 |
 |---|---|---|---|---|
 | 2026-05-20 | 0.1 | 金城麗奈 | – | 初版作成 |
+| 2026-05-22 | 0.1 | 上原綾真 | – | 不要な箇所の削除 |
