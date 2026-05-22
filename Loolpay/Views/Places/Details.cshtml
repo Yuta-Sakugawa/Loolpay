@@ -1,0 +1,45 @@
+@model Loolpay.Models.Store
+
+@{
+    ViewData["Title"] = "Store Details";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h3 class="card-title mb-0">Store Details</h3>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Store Name</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.StoreName)</dd>
+
+                        <dt class="col-sm-3">Address</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.StoreAddress)</dd>
+
+                        <dt class="col-sm-3">Payment Methods</dt>
+                        <dd class="col-sm-9">
+                            @if (!string.IsNullOrEmpty(Model.Pay))
+                            {
+                                @foreach (var payment in Model.Pay.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                                {
+                                    <span class="badge bg-light text-primary border border-primary">@payment.Trim()</span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">No payment methods listed</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+                <div class="card-footer d-flex justify-content-end gap-2">
+                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                    <a asp-action="Edit" asp-route-id="@Model.StoreId" class="btn btn-primary">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

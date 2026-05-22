@@ -1,0 +1,63 @@
+@model IEnumerable<Loolpay.Models.Store>
+
+@{
+    ViewData["Title"] = "Places List";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Store List</h1>
+        <div class="d-flex gap-2">
+            <form asp-action="Index" method="get" class="d-flex">
+                <input type="text" name="SearchString" class="form-control me-2" placeholder="Search stores..." />
+                <button type="submit" class="btn btn-outline-primary">Search</button>
+            </form>
+            <a asp-action="Create" class="btn btn-success">Add New Store</a>
+        </div>
+    </div>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">@item.StoreName</h5>
+                        <p class="card-text">
+                            <strong>Address:</strong><br />
+                            <span class="text-muted">@(string.IsNullOrEmpty(item.StoreAddress) ? "N/A" : item.StoreAddress)</span>
+                        </p>
+                        <p class="card-text">
+                            <strong>Payments:</strong><br />
+                            <div class="store-card-payments">
+                                @if (!string.IsNullOrEmpty(item.Pay))
+                                {
+                                    @foreach (var payment in item.Pay.Split(',', StringSplitOptions.RemoveEmptyEntries))
+                                    {
+                                        <span class="badge bg-light text-primary border border-primary">@payment.Trim()</span>
+                                    }
+                                }
+                                else
+                                {
+                                    <span class="text-muted-small">No payment methods listed</span>
+                                }
+                            </div>
+                        </p>
+                    </div>
+                    <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
+                        <a asp-action="Details" asp-route-id="@item.StoreId" class="btn btn-outline-secondary btn-sm">Details</a>
+                        <div class="btn-group">
+                            <a asp-action="Edit" asp-route-id="@item.StoreId" class="btn btn-primary btn-sm">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.StoreId" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">No stores found.</div>
+    }
+</div>

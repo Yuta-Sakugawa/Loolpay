@@ -1,0 +1,60 @@
+@model Loolpay.Models.Store
+
+@{
+    ViewData["Title"] = "Edit Store";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Edit Store</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="StoreId" />
+                        <div class="mb-3">
+                            <label asp-for="StoreName" class="form-label">Store Name</label>
+                            <input asp-for="StoreName" class="form-control" />
+                            <span asp-validation-for="StoreName" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="StoreAddress" class="form-label">Address</label>
+                            <input asp-for="StoreAddress" class="form-control" />
+                            <span asp-validation-for="StoreAddress" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Payment Methods</label>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="現金" id="payCash" @(Model.SelectedPaymentMethods.Contains("現金") ? "checked" : "")>
+                                <label class="form-check-label" for="payCash">現金</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="クレジットカード" id="payCredit" @(Model.SelectedPaymentMethods.Contains("クレジットカード") ? "checked" : "")>
+                                <label class="form-check-label" for="payCredit">クレジットカード</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="QR決済" id="payQR" @(Model.SelectedPaymentMethods.Contains("QR決済") ? "checked" : "")>
+                                <label class="form-check-label" for="payQR">QR決済</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="プリペイドカード" id="payPrepaid" @(Model.SelectedPaymentMethods.Contains("プリペイドカード") ? "checked" : "")>
+                                <label class="form-check-label" for="payPrepaid">プリペイドカード</label>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

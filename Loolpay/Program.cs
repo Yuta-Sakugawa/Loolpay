@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Loolpay.Data;
+using Loolpay.Models;
 
 namespace Loolpay
 {
@@ -12,7 +13,7 @@ namespace Loolpay
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<Loolpay.Data.ApplicationDbContext>(options =>
-                options.UseNpgsql(connectionString));
+                options.UseSqlite(connectionString));
 
             builder.Services.AddControllersWithViews();
 
@@ -24,25 +25,15 @@ namespace Loolpay
                 var context = scope.ServiceProvider.GetRequiredService<Loolpay.Data.ApplicationDbContext>();
                 context.Database.Migrate();
 
-                // Seed Users
-                if (!context.Users.Any())
+                // Seed Stores
+                if (!context.Stores.Any())
                 {
-                    context.Users.AddRange(
-                        new Loolpay.Models.User { Name = "Alice", Email = "alice@example.com" },
-                        new Loolpay.Models.User { Name = "Bob", Email = "bob@example.com" },
-                        new Loolpay.Models.User { Name = "田中太郎", Email = "aaa@gmail.com" }
+                    context.Stores.AddRange(
+                        new Store { StoreName = "セブンイレブン 渋谷店", StoreAddress = "東京都渋谷区...", Pay = "PayPay, クレジットカード" },
+                        new Store { StoreName = "ローソン 新宿店", StoreAddress = "東京都新宿区...", Pay = "LINE Pay, 現金" }
                     );
+                    context.SaveChanges();
                 }
-
-                // Seed Products
-                if (!context.Products.Any())
-                {
-                    context.Products.AddRange(
-                        new Loolpay.Models.Product { Name = "Laptop", Price = 1200.00m, Stock = 10 },
-                        new Loolpay.Models.Product { Name = "Mouse", Price = 25.50m, Stock = 50 }
-                    );
-                }
-                context.SaveChanges();
             }
 
             // Configure the HTTP request pipeline.

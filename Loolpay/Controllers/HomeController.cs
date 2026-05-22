@@ -17,32 +17,9 @@ public class HomeController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-        // Ensure some data exists if empty
-        if (!_context.Users.Any())
-        {
-            _context.Users.AddRange(
-                new User { Name = "Alice", Email = "alice@example.com" },
-                new User { Name = "Bob", Email = "bob@example.com" },
-                new User { Name = "田中太郎", Email = "aaa@gmail.com" }
-            );
-            await _context.SaveChangesAsync();
-        }
-
-        if (!_context.Products.Any())
-        {
-            _context.Products.AddRange(
-                new Product { Name = "Laptop", Price = 1200.00m, Stock = 10 },
-                new Product { Name = "Mouse", Price = 25.50m, Stock = 50 }
-            );
-            await _context.SaveChangesAsync();
-        }
-
-        var users = await _context.Users.ToListAsync();
-        var products = await _context.Products.ToListAsync();
-        ViewBag.Products = products;
-        return View(users);
+        return RedirectToAction("Index", "Places");
     }
 
     public IActionResult Privacy()
