@@ -14,10 +14,12 @@ namespace Loolpay.Models
         [Required]
         [MaxLength(100)]
         [Column("store_name")]
+        [Display(Name = "Store Name")]
         public string StoreName { get; set; } = string.Empty;
 
         [MaxLength(100)]
         [Column("store_address")]
+        [Display(Name = "Address")]
         public string? StoreAddress { get; set; }
 
         [MaxLength(200)]

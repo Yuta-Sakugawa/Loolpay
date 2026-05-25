@@ -15,9 +15,22 @@ namespace Loolpay
             builder.Services.AddDbContext<Loolpay.Data.ApplicationDbContext>(options =>
                 options.UseSqlite(connectionString));
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            builder.Services.AddControllersWithViews()
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization();
 
             var app = builder.Build();
+
+            // Localization
+            var supportedCultures = new[] { "ja", "en" };
+            var localizationOptions = new RequestLocalizationOptions()
+                .SetDefaultCulture(supportedCultures[0])
+                .AddSupportedCultures(supportedCultures)
+                .AddSupportedUICultures(supportedCultures);
+
+            app.UseRequestLocalization(localizationOptions);
 
             // Auto-migrate database
             using (var scope = app.Services.CreateScope())

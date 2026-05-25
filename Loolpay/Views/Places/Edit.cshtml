@@ -1,7 +1,9 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model Loolpay.Models.Store
 
 @{
-    ViewData["Title"] = "Edit Store";
+    ViewData["Title"] = Localizer["Edit Store"];
 }
 
 <div class="container mt-4">
@@ -9,7 +11,7 @@
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
-                    <h3 class="card-title mb-0">Edit Store</h3>
+                    <h3 class="card-title mb-0">@Localizer["Edit Store"]</h3>
                 </div>
                 <div class="card-body">
                     <form asp-action="Edit" enctype="multipart/form-data">
@@ -17,17 +19,17 @@
                         <input type="hidden" asp-for="StoreId" />
                         <input type="hidden" asp-for="ImagePath" />
                         <div class="mb-3">
-                            <label asp-for="StoreName" class="form-label">Store Name</label>
+                            <label asp-for="StoreName" class="form-label">@Localizer["Store Name"]</label>
                             <input asp-for="StoreName" class="form-control" />
                             <span asp-validation-for="StoreName" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label asp-for="StoreAddress" class="form-label">Address</label>
+                            <label asp-for="StoreAddress" class="form-label">@Localizer["Address"]</label>
                             <input asp-for="StoreAddress" class="form-control" />
                             <span asp-validation-for="StoreAddress" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Current Photo</label>
+                            <label class="form-label">@Localizer["Current Photo"]</label>
                             @if (!string.IsNullOrEmpty(Model.ImagePath))
                             {
                                 <div class="mb-2">
@@ -36,32 +38,33 @@
                             }
                             else
                             {
-                                <p class="text-muted">No photo available.</p>
+                                <p class="text-muted">@Localizer["No photo available."]</p>
                             }
+                            <label class="form-label mt-2">@Localizer["Photo Edit"]</label>
                             <input type="file" name="imageFile" class="form-control" accept="image/*" />
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Payment Methods</label>
+                            <label class="form-label">@Localizer["Payment Methods"]</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="現金" id="payCash" @(Model.SelectedPaymentMethods.Contains("現金") ? "checked" : "")>
-                                <label class="form-check-label" for="payCash">現金</label>
+                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="Cash" id="payCash" @(Model.SelectedPaymentMethods.Contains("Cash") ? "checked" : "")>
+                                <label class="form-check-label" for="payCash">@Localizer["Cash"]</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="クレジットカード" id="payCredit" @(Model.SelectedPaymentMethods.Contains("クレジットカード") ? "checked" : "")>
-                                <label class="form-check-label" for="payCredit">クレジットカード</label>
+                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="Credit Card" id="payCredit" @(Model.SelectedPaymentMethods.Contains("Credit Card") ? "checked" : "")>
+                                <label class="form-check-label" for="payCredit">@Localizer["Credit Card"]</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="QR決済" id="payQR" @(Model.SelectedPaymentMethods.Contains("QR決済") ? "checked" : "")>
-                                <label class="form-check-label" for="payQR">QR決済</label>
+                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="QR Payment" id="payQR" @(Model.SelectedPaymentMethods.Contains("QR Payment") ? "checked" : "")>
+                                <label class="form-check-label" for="payQR">@Localizer["QR Payment"]</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="プリペイドカード" id="payPrepaid" @(Model.SelectedPaymentMethods.Contains("プリペイドカード") ? "checked" : "")>
-                                <label class="form-check-label" for="payPrepaid">プリペイドカード</label>
+                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="Prepaid Card" id="payPrepaid" @(Model.SelectedPaymentMethods.Contains("Prepaid Card") ? "checked" : "")>
+                                <label class="form-check-label" for="payPrepaid">@Localizer["Prepaid Card"]</label>
                             </div>
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                            <a asp-action="Index" class="btn btn-secondary">@Localizer["Cancel"]</a>
+                            <button type="submit" class="btn btn-primary">@Localizer["Save Changes"]</button>
                         </div>
                     </form>
                 </div>

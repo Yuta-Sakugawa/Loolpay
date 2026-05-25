@@ -1,7 +1,9 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model Loolpay.Models.Store
 
 @{
-    ViewData["Title"] = "Delete Store";
+    ViewData["Title"] = Localizer["Delete Store"];
 }
 
 <div class="container mt-4">
@@ -9,24 +11,24 @@
         <div class="col-md-6">
             <div class="card shadow border-danger">
                 <div class="card-header bg-danger text-white">
-                    <h3 class="card-title mb-0">Delete Store</h3>
+                    <h3 class="card-title mb-0">@Localizer["Delete Store"]</h3>
                 </div>
                 <div class="card-body">
-                    <p class="lead text-danger">Are you sure you want to delete this store?</p>
+                    <p class="lead text-danger">@Localizer["Are you sure you want to delete this store?"]</p>
                     <hr />
                     <dl class="row">
-                        <dt class="col-sm-4">Store Name</dt>
+                        <dt class="col-sm-4">@Localizer["Store Name"]</dt>
                         <dd class="col-sm-8">@Html.DisplayFor(model => model.StoreName)</dd>
 
-                        <dt class="col-sm-4">Address</dt>
+                        <dt class="col-sm-4">@Localizer["Address"]</dt>
                         <dd class="col-sm-8">@Html.DisplayFor(model => model.StoreAddress)</dd>
                     </dl>
 
                     <form asp-action="Delete">
                         <input type="hidden" asp-for="StoreId" />
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-danger">Confirm Delete</button>
+                            <a asp-action="Index" class="btn btn-secondary">@Localizer["Cancel"]</a>
+                            <button type="submit" class="btn btn-danger">@Localizer["Confirm Delete"]</button>
                         </div>
                     </form>
                 </div>
