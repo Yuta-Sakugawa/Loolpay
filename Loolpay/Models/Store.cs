@@ -24,6 +24,13 @@ namespace Loolpay.Models
         [Column("pay")]
         public string? Pay { get; set; }
 
+        [MaxLength(255)]
+        [Column("image_path")]
+        public string? ImagePath { get; set; }
+
+        [Column("last_updated")]
+        public DateTime LastUpdated { get; set; } = DateTime.Now;
+
         [NotMapped]
         public List<string> SelectedPaymentMethods { get; set; } = new List<string>();
     }

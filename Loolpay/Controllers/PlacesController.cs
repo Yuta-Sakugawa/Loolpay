@@ -8,10 +8,12 @@ namespace Loolpay.Controllers;
 public class PlacesController : Controller
 {
     private readonly ApplicationDbContext _context;
+    private readonly IWebHostEnvironment _hostEnvironment;
 
-    public PlacesController(ApplicationDbContext context)
+    public PlacesController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
     {
         _context = context;
+        _hostEnvironment = hostEnvironment;
     }
 
     // GET: Places
@@ -56,7 +58,7 @@ public class PlacesController : Controller
     // POST: Places/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("StoreName,StoreAddress,SelectedPaymentMethods")] Store store)
+    public async Task<IActionResult> Create([Bind("StoreName,StoreAddress,SelectedPaymentMethods")] Store store, IFormFile? imageFile)
     {
         if (ModelState.IsValid)
         {
@@ -64,6 +66,28 @@ public class PlacesController : Controller
             {
                 store.Pay = string.Join(", ", store.SelectedPaymentMethods);
             }
+
+            if (imageFile != null)
+            {
+                string wwwRootPath = _hostEnvironment.WebRootPath;
+                string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                string path = Path.Combine(wwwRootPath + "/images/stores/", fileName);
+
+                var directory = Path.Combine(wwwRootPath, "images/stores");
+                if (!Directory.Exists(directory))
+                {
+                    Directory.CreateDirectory(directory);
+                }
+
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(fileStream);
+                }
+                store.ImagePath = fileName;
+            }
+
+            store.LastUpdated = DateTime.Now;
+
             _context.Add(store);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
@@ -96,7 +120,7 @@ public class PlacesController : Controller
     // POST: Places/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("StoreId,StoreName,StoreAddress,SelectedPaymentMethods")] Store store)
+    public async Task<IActionResult> Edit(int id, [Bind("StoreId,StoreName,StoreAddress,SelectedPaymentMethods,ImagePath")] Store store, IFormFile? imageFile)
     {
         if (id != store.StoreId)
         {
@@ -115,6 +139,38 @@ public class PlacesController : Controller
                 {
                     store.Pay = null;
                 }
+
+                if (imageFile != null)
+                {
+                    string wwwRootPath = _hostEnvironment.WebRootPath;
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                    string path = Path.Combine(wwwRootPath + "/images/stores/", fileName);
+
+                    var directory = Path.Combine(wwwRootPath, "images/stores");
+                    if (!Directory.Exists(directory))
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+
+                    // Delete old image if it exists
+                    if (!string.IsNullOrEmpty(store.ImagePath))
+                    {
+                        var oldPath = Path.Combine(wwwRootPath + "/images/stores/", store.ImagePath);
+                        if (System.IO.File.Exists(oldPath))
+                        {
+                            System.IO.File.Delete(oldPath);
+                        }
+                    }
+
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await imageFile.CopyToAsync(fileStream);
+                    }
+                    store.ImagePath = fileName;
+                }
+
+                store.LastUpdated = DateTime.Now;
+
                 _context.Update(store);
                 await _context.SaveChangesAsync();
             }
