@@ -1,7 +1,9 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model Loolpay.Models.Store
 
 @{
-    ViewData["Title"] = "Store Details";
+    ViewData["Title"] = Localizer["Store Details"];
 }
 
 <div class="container mt-4">
@@ -9,7 +11,7 @@
         <div class="col-md-8">
             <div class="card shadow">
                 <div class="card-header bg-info text-white">
-                    <h3 class="card-title mb-0">Store Details</h3>
+                    <h3 class="card-title mb-0">@Localizer["Store Details"]</h3>
                 </div>
                 <div class="card-body">
                     <div class="row mb-4">
@@ -21,40 +23,40 @@
                             else
                             {
                                 <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 200px; border: 2px dashed #dee2e6;">
-                                    <span class="text-muted">No photo available</span>
+                                    <span class="text-muted">@Localizer["No photo available"]</span>
                                 </div>
                             }
                         </div>
                     </div>
                     <dl class="row">
-                        <dt class="col-sm-3">Store Name</dt>
+                        <dt class="col-sm-3">@Localizer["Store Name"]</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.StoreName)</dd>
 
-                        <dt class="col-sm-3">Address</dt>
+                        <dt class="col-sm-3">@Localizer["Address"]</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.StoreAddress)</dd>
 
-                        <dt class="col-sm-3">Payment Methods</dt>
+                        <dt class="col-sm-3">@Localizer["Payment Methods"]</dt>
                         <dd class="col-sm-9">
                             @if (!string.IsNullOrEmpty(Model.Pay))
                             {
                                 @foreach (var payment in Model.Pay.Split(',', StringSplitOptions.RemoveEmptyEntries))
                                 {
-                                    <span class="badge bg-light text-primary border border-primary">@payment.Trim()</span>
+                                    <span class="badge bg-light text-primary border border-primary">@Localizer[payment.Trim()]</span>
                                 }
                             }
                             else
                             {
-                                <span class="text-muted">No payment methods listed</span>
+                                <span class="text-muted">@Localizer["No payment methods listed"]</span>
                             }
                         </dd>
 
-                        <dt class="col-sm-3">Last Updated</dt>
+                        <dt class="col-sm-3">@Localizer["Last Updated"]</dt>
                         <dd class="col-sm-9">@Model.LastUpdated.ToString("yyyy/MM/dd HH:mm")</dd>
                     </dl>
                 </div>
                 <div class="card-footer d-flex justify-content-end gap-2">
-                    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-                    <a asp-action="Edit" asp-route-id="@Model.StoreId" class="btn btn-primary">Edit</a>
+                    <a asp-action="Index" class="btn btn-secondary">@Localizer["Back to List"]</a>
+                    <a asp-action="Edit" asp-route-id="@Model.StoreId" class="btn btn-primary">@Localizer["Edit"]</a>
                 </div>
             </div>
         </div>

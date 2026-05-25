@@ -1,7 +1,9 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model Loolpay.Models.Store
 
 @{
-    ViewData["Title"] = "Add Store";
+    ViewData["Title"] = Localizer["Add Store"];
 }
 
 <div class="container mt-4">
@@ -9,47 +11,47 @@
         <div class="col-md-6">
             <div class="card shadow">
                 <div class="card-header bg-success text-white">
-                    <h3 class="card-title mb-0">Add New Store</h3>
+                    <h3 class="card-title mb-0">@Localizer["Add New Store"]</h3>
                 </div>
                 <div class="card-body">
                     <form asp-action="Create" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <div class="mb-3">
-                            <label asp-for="StoreName" class="form-label">Store Name</label>
-                            <input asp-for="StoreName" class="form-control" placeholder="Enter store name" />
+                            <label asp-for="StoreName" class="form-label">@Localizer["Store Name"]</label>
+                            <input asp-for="StoreName" class="form-control" placeholder="@Localizer["Enter store name"]" />
                             <span asp-validation-for="StoreName" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label asp-for="StoreAddress" class="form-label">Address</label>
-                            <input asp-for="StoreAddress" class="form-control" placeholder="Enter address" />
+                            <label asp-for="StoreAddress" class="form-label">@Localizer["Address"]</label>
+                            <input asp-for="StoreAddress" class="form-control" placeholder="@Localizer["Enter address"]" />
                             <span asp-validation-for="StoreAddress" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Store Photo</label>
+                            <label class="form-label">@Localizer["Store Photo"]</label>
                             <input type="file" name="imageFile" class="form-control" accept="image/*" />
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Payment Methods</label>
+                            <label class="form-label">@Localizer["Payment Methods"]</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="現金" id="payCash">
-                                <label class="form-check-label" for="payCash">現金</label>
+                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="Cash" id="payCash">
+                                <label class="form-check-label" for="payCash">@Localizer["Cash"]</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="クレジットカード" id="payCredit">
-                                <label class="form-check-label" for="payCredit">クレジットカード</label>
+                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="Credit Card" id="payCredit">
+                                <label class="form-check-label" for="payCredit">@Localizer["Credit Card"]</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="QR決済" id="payQR">
-                                <label class="form-check-label" for="payQR">QR決済</label>
+                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="QR Payment" id="payQR">
+                                <label class="form-check-label" for="payQR">@Localizer["QR Payment"]</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="プリペイドカード" id="payPrepaid">
-                                <label class="form-check-label" for="payPrepaid">プリペイドカード</label>
+                                <input class="form-check-input" type="checkbox" name="SelectedPaymentMethods" value="Prepaid Card" id="payPrepaid">
+                                <label class="form-check-label" for="payPrepaid">@Localizer["Prepaid Card"]</label>
                             </div>
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-                            <button type="submit" class="btn btn-success">Create Store</button>
+                            <a asp-action="Index" class="btn btn-secondary">@Localizer["Cancel"]</a>
+                            <button type="submit" class="btn btn-success">@Localizer["Create Store"]</button>
                         </div>
                     </form>
                 </div>

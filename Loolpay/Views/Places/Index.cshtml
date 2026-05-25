@@ -1,18 +1,20 @@
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 @model IEnumerable<Loolpay.Models.Store>
 
 @{
-    ViewData["Title"] = "Places List";
+    ViewData["Title"] = Localizer["Places List"];
 }
 
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Store List</h1>
+        <h1>@Localizer["Store List"]</h1>
         <div class="d-flex gap-2">
             <form asp-action="Index" method="get" class="d-flex">
-                <input type="text" name="SearchString" class="form-control me-2" placeholder="Search stores..." />
-                <button type="submit" class="btn btn-outline-primary">Search</button>
+                <input type="text" name="SearchString" class="form-control me-2" placeholder="@Localizer["Search stores..."]" />
+                <button type="submit" class="btn btn-outline-primary">@Localizer["Search"]</button>
             </form>
-            <a asp-action="Create" class="btn btn-success">Add New Store</a>
+            <a asp-action="Create" class="btn btn-success">@Localizer["Add New Store"]</a>
         </div>
     </div>
 
@@ -28,40 +30,40 @@
                     else
                     {
                         <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                            <span class="text-muted small">No photo</span>
+                            <span class="text-muted small">@Localizer["No photo"]</span>
                         </div>
                     }
                     <div class="card-body">
                         <h5 class="card-title text-primary">@item.StoreName</h5>
                         <p class="card-text">
-                            <strong>Address:</strong><br />
+                            <strong>@Localizer["Address"]:</strong><br />
                             <span class="text-muted">@(string.IsNullOrEmpty(item.StoreAddress) ? "N/A" : item.StoreAddress)</span>
                         </p>
                         <p class="card-text">
-                            <strong>Payments:</strong><br />
+                            <strong>@Localizer["Payments"]:</strong><br />
                             <div class="store-card-payments">
                                 @if (!string.IsNullOrEmpty(item.Pay))
                                 {
                                     @foreach (var payment in item.Pay.Split(',', StringSplitOptions.RemoveEmptyEntries))
                                     {
-                                        <span class="badge bg-light text-primary border border-primary">@payment.Trim()</span>
+                                        <span class="badge bg-light text-primary border border-primary">@Localizer[payment.Trim()]</span>
                                     }
                                 }
                                 else
                                 {
-                                    <span class="text-muted-small">No payment methods listed</span>
+                                    <span class="text-muted-small">@Localizer["No payment methods listed"]</span>
                                 }
                             </div>
                         </p>
                         <p class="card-text">
-                            <small class="text-muted">Last Updated: @item.LastUpdated.ToString("yyyy/MM/dd HH:mm")</small>
+                            <small class="text-muted">@Localizer["Last Updated"]: @item.LastUpdated.ToString("yyyy/MM/dd HH:mm")</small>
                         </p>
                     </div>
                     <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
-                        <a asp-action="Details" asp-route-id="@item.StoreId" class="btn btn-outline-secondary btn-sm">Details</a>
+                        <a asp-action="Details" asp-route-id="@item.StoreId" class="btn btn-outline-secondary btn-sm">@Localizer["Details"]</a>
                         <div class="btn-group">
-                            <a asp-action="Edit" asp-route-id="@item.StoreId" class="btn btn-primary btn-sm">Edit</a>
-                            <a asp-action="Delete" asp-route-id="@item.StoreId" class="btn btn-danger btn-sm">Delete</a>
+                            <a asp-action="Edit" asp-route-id="@item.StoreId" class="btn btn-primary btn-sm">@Localizer["Edit"]</a>
+                            <a asp-action="Delete" asp-route-id="@item.StoreId" class="btn btn-danger btn-sm">@Localizer["Delete"]</a>
                         </div>
                     </div>
                 </div>
@@ -71,6 +73,6 @@
 
     @if (!Model.Any())
     {
-        <div class="alert alert-info">No stores found.</div>
+        <div class="alert alert-info">@Localizer["No stores found."]</div>
     }
 </div>
