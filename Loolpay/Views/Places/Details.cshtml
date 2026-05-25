@@ -12,6 +12,20 @@
                     <h3 class="card-title mb-0">Store Details</h3>
                 </div>
                 <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-12 text-center">
+                            @if (!string.IsNullOrEmpty(Model.ImagePath))
+                            {
+                                <img src="~/images/stores/@Model.ImagePath" class="img-fluid rounded shadow-sm" style="max-height: 300px;" alt="@Model.StoreName" />
+                            }
+                            else
+                            {
+                                <div class="bg-light d-flex align-items-center justify-content-center rounded" style="height: 200px; border: 2px dashed #dee2e6;">
+                                    <span class="text-muted">No photo available</span>
+                                </div>
+                            }
+                        </div>
+                    </div>
                     <dl class="row">
                         <dt class="col-sm-3">Store Name</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.StoreName)</dd>
@@ -33,6 +47,9 @@
                                 <span class="text-muted">No payment methods listed</span>
                             }
                         </dd>
+
+                        <dt class="col-sm-3">Last Updated</dt>
+                        <dd class="col-sm-9">@Model.LastUpdated.ToString("yyyy/MM/dd HH:mm")</dd>
                     </dl>
                 </div>
                 <div class="card-footer d-flex justify-content-end gap-2">
