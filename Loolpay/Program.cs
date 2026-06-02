@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Loolpay.Data;
 using Loolpay.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Loolpay
 {
@@ -15,11 +16,15 @@ namespace Loolpay
             builder.Services.AddDbContext<Loolpay.Data.ApplicationDbContext>(options =>
                 options.UseSqlite(connectionString));
 
+            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
             builder.Services.AddControllersWithViews()
                 .AddViewLocalization()
                 .AddDataAnnotationsLocalization();
+            builder.Services.AddRazorPages();
 
             var app = builder.Build();
 
@@ -58,11 +63,13 @@ namespace Loolpay
 
             app.UseRouting();
 
+            app.UseAuthentication(); 
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapRazorPages();
 
             app.Run();
         }
