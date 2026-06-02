@@ -9,65 +9,145 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Loolpay.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+            /* --------------------------------------------------
+                     * サイドバー固定用のカスタムCSS（後で site.css に移してもOK）
+                     * -------------------------------------------------- */
+            body {
+                background-color: #f8f9fa; /* 薄いグレーの背景 */
+            }
+
+            .wrapper {
+                display: flex;
+                min-height: 100vh;
+            }
+            /* 固定サイドバー */
+            .sidebar {
+                width: 260px;
+                min-width: 260px;
+                height: 100vh;
+                position: fixed;
+                top: 0;
+                left: 0;
+                background-color: #ffffff;
+                border-right: 1px solid #e9ecef;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                padding: 2rem 1.5rem;
+                z-index: 1000;
+            }
+            /* 右側のメインエリア */
+            .main-content {
+                flex-grow: 1;
+                margin-left: 260px; /* サイドバーの幅分だけ空ける */
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+            }
+            /* 上部ミニヘッダー */
+            .top-navbar {
+                height: 70px;
+                background-color: #ffffff;
+                padding: 0 2rem;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end; /* 右寄せ */
+            }
+            /* コンテンツのパディング */
+            .content-body {
+                padding: 2rem;
+                flex-grow: 1;
+            }
+            /* ナビゲーションリンクのスタイル調整 */
+            .sidebar .nav-link {
+                color: #495057;
+                padding: 0.8rem 1rem;
+                border-radius: 0.5rem;
+                margin-bottom: 0.25rem;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                text-decoration: none;
+            }
+
+                .sidebar .nav-link:hover, .sidebar .nav-link.active {
+                    background-color: #f1f3f5;
+                    color: #0d6efd;
+                }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Loolpay</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Places" asp-action="Index">@Localizer["Stores"]</a>
+
+    <div class="wrapper">
+        <aside class="sidebar">
+            <div>
+                <div class="mb-4 px-2">
+                    <a class="navbar-brand fs-3 fw-bold text-primary" asp-area="" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-wallet2 me-2"></i>Loolpay
+                    </a>
+                </div>
+
+                <nav class="nav flex-column">
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-house-door"></i> @Localizer["Home"]
+                    </a>
+                    <a class="nav-link active" asp-area="" asp-controller="Places" asp-action="Index">
+                        <i class="bi bi-geo-alt"></i> @Localizer["Stores"]
+                    </a>
+                    <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">
+                        <i class="bi bi-shield-lock"></i> @Localizer["Privacy"]
+                    </a>
+                </nav>
+            </div>
+
+            <div>
+                <hr>
+                <div class="dropdown mb-3">
+                    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-translate"></i> @Localizer["Language"]
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <li>
+                            <form asp-controller="Language" asp-action="SetLanguage" method="post" class="px-3 py-1">
+                                <input type="hidden" name="culture" value="ja" />
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                <button type="submit" class="dropdown-item p-0">日本語</button>
+                            </form>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">@Localizer["Privacy"]</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                    <ul class="navbar-nav">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-dark" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                @Localizer["Language"]
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-                                <li>
-                                    <form asp-controller="Language" asp-action="SetLanguage" method="post" class="px-3 py-1">
-                                        <input type="hidden" name="culture" value="ja" />
-                                        <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
-                                        <button type="submit" class="dropdown-item p-0">日本語</button>
-                                    </form>
-                                </li>
-                                <li>
-                                    <form asp-controller="Language" asp-action="SetLanguage" method="post" class="px-3 py-1">
-                                        <input type="hidden" name="culture" value="en" />
-                                        <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
-                                        <button type="submit" class="dropdown-item p-0">English</button>
-                                    </form>
-                                </li>
-                            </ul>
+                        <li>
+                            <form asp-controller="Language" asp-action="SetLanguage" method="post" class="px-3 py-1">
+                                <input type="hidden" name="culture" value="en" />
+                                <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                <button type="submit" class="dropdown-item p-0">English</button>
+                            </form>
                         </li>
                     </ul>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+        </aside>
+
+        <div class="main-content">
+            <header class="top-navbar border-bottom">
+                <div class="d-flex align-items-center gap-3">
+                    <partial name="_LoginPartial" />
+                </div>
+            </header>
+
+            <main role="main" class="content-body">
+                @RenderBody()
+            </main>
+
+            <footer class="footer mt-auto py-3 bg-white border-top text-center text-muted">
+                <div class="container-fluid">
+                    <span>&copy; 2026 - Loolpay</span>
+                </div>
+            </footer>
+        </div>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <span>&copy; 2026 - Loolpay</span>
-            <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
-        </div>
-    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
