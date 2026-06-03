@@ -32,6 +32,9 @@
                         <dt class="col-sm-3">@Localizer["Store Name"]</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.StoreName)</dd>
 
+                        <dt class="col-sm-3">@Localizer["Genre"]</dt>
+                        <dd class="col-sm-9">@Localizer[Model.Genre.ToString()]</dd>
+
                         <dt class="col-sm-3">@Localizer["Address"]</dt>
                         <dd class="col-sm-9">@Html.DisplayFor(model => model.StoreAddress)</dd>
 

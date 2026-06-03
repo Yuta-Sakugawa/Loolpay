@@ -27,6 +27,13 @@
                             <span asp-validation-for="StoreAddress" class="text-danger"></span>
                         </div>
                         <div class="mb-3">
+                            <label asp-for="Genre" class="form-label">@Localizer["Genre"]</label>
+                            <select asp-for="Genre" asp-items="Html.GetEnumSelectList<Loolpay.Models.StoreGenre>()" class="form-control">
+                                <option value="">@Localizer["Select Genre"]</option>
+                            </select>
+                            <span asp-validation-for="Genre" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
                             <label class="form-label">@Localizer["Store Photo"]</label>
                             <input type="file" name="imageFile" class="form-control" accept="image/*" />
                         </div>

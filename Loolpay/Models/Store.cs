@@ -3,6 +3,28 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Loolpay.Models
 {
+    public enum StoreGenre
+    {
+        [Display(Name = "コンビニ")]
+        ConvenienceStore,
+        [Display(Name = "スーパー")]
+        Supermarket,
+        [Display(Name = "飲食店")]
+        Restaurant,
+        [Display(Name = "カフェ")]
+        Cafe,
+        [Display(Name = "ドラッグストア")]
+        DrugStore,
+        [Display(Name = "ショッピングモール")]
+        ShoppingMall,
+        [Display(Name = "ガソリンスタンド")]
+        GasStation,
+        [Display(Name = "ホテル")]
+        Hotel,
+        [Display(Name = "その他")]
+        Other
+    }
+
     [Table("stores")]
     public class Store
     {
@@ -25,6 +47,10 @@ namespace Loolpay.Models
         [MaxLength(200)]
         [Column("pay")]
         public string? Pay { get; set; }
+
+        [Column("genre")]
+        [Display(Name = "Genre")]
+        public StoreGenre Genre { get; set; }
 
         [MaxLength(255)]
         [Column("image_path")]

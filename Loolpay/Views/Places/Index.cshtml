@@ -1,9 +1,40 @@
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Loolpay.Models
 @inject IViewLocalizer Localizer
 @model IEnumerable<Loolpay.Models.Store>
 
 @{
     ViewData["Title"] = Localizer["Places List"];
+    var currentGenre = ViewData["CurrentGenre"] as StoreGenre?;
+    var searchString = ViewData["CurrentSearchString"] as string;
+    var currentPayment = ViewData["CurrentPayment"] as string;
+    
+    // 全店舗数（検索のみ反映）
+    var totalCount = Model.Count();
+}
+
+@{
+    string GetGenreClass(Loolpay.Models.StoreGenre genre) => genre switch
+    {
+        Loolpay.Models.StoreGenre.ConvenienceStore => "bg-convenience",
+        Loolpay.Models.StoreGenre.Supermarket => "bg-supermarket",
+        Loolpay.Models.StoreGenre.Restaurant => "bg-restaurant",
+        Loolpay.Models.StoreGenre.Cafe => "bg-cafe",
+        Loolpay.Models.StoreGenre.DrugStore => "bg-drugstore",
+        Loolpay.Models.StoreGenre.ShoppingMall => "bg-shoppingmall",
+        Loolpay.Models.StoreGenre.GasStation => "bg-gasstation",
+        Loolpay.Models.StoreGenre.Hotel => "bg-hotel",
+        _ => "bg-other"
+    };
+
+    string GetPaymentClass(string payment) => payment switch
+    {
+        "Cash" => "bg-cash",
+        "Credit Card" => "bg-credit",
+        "QR Payment" => "bg-qr",
+        "Prepaid Card" => "bg-prepaid",
+        _ => "bg-other"
+    };
 }
 
 <div class="container mt-4">
@@ -11,16 +42,58 @@
         <h1>@Localizer["Store List"]</h1>
         <div class="d-flex gap-2">
             <form asp-action="Index" method="get" class="d-flex">
-                <input type="text" name="SearchString" class="form-control me-2" placeholder="@Localizer["Search stores..."]" />
+                <input type="hidden" name="genre" value="@currentGenre" />
+                <input type="hidden" name="payment" value="@currentPayment" />
+                <input type="text" name="SearchString" value="@searchString" class="form-control me-2" placeholder="@Localizer["Search stores..."]" />
                 <button type="submit" class="btn btn-outline-primary">@Localizer["Search"]</button>
             </form>
             <a asp-action="Create" class="btn btn-success">@Localizer["Add New Store"]</a>
         </div>
     </div>
 
+    @* ジャンルフィルタUI *@
+    <div class="mb-3">
+        <label class="form-label">@Localizer["Genre Filter"]</label>
+        <div class="d-flex flex-wrap gap-2">
+            <a asp-action="Index" asp-route-searchString="@searchString" asp-route-payment="@currentPayment"
+               class="badge badge-genre bg-other @(!currentGenre.HasValue ? "active" : "")">
+                @Localizer["All"]
+            </a>
+            @foreach (StoreGenre genre in Enum.GetValues(typeof(StoreGenre)))
+            {
+                <a asp-action="Index" asp-route-genre="@genre" asp-route-searchString="@searchString" asp-route-payment="@currentPayment"
+                   class="badge badge-genre @GetGenreClass(genre) @(currentGenre == genre ? "active" : "")">
+                    @Localizer[genre.ToString()]
+                </a>
+            }
+        </div>
+    </div>
+
+    @* 支払い方法フィルタUI *@
+    <div class="mb-4">
+        <label class="form-label">@Localizer["Payment Filter"]</label>
+        @{
+            var paymentMethods = new[] { "Cash", "Credit Card", "QR Payment", "Prepaid Card" };
+        }
+        <div class="d-flex flex-wrap gap-2">
+            <a asp-action="Index" asp-route-searchString="@searchString" asp-route-genre="@currentGenre"
+               class="badge badge-genre bg-other @(string.IsNullOrEmpty(currentPayment) ? "active" : "")">
+                @Localizer["All"]
+            </a>
+            @foreach (var p in paymentMethods)
+            {
+                <a asp-action="Index" asp-route-payment="@p" asp-route-genre="@currentGenre" asp-route-searchString="@searchString"
+                   class="badge badge-genre @GetPaymentClass(p) @(currentPayment == p ? "active" : "")">
+                    @Localizer[p]
+                </a>
+            }
+        </div>
+    </div>
+
     <div class="row">
         @foreach (var item in Model)
         {
+            @* (店舗表示部分は変更なしのため省略して元の内容を維持) *@
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                     @if (!string.IsNullOrEmpty(item.ImagePath))
@@ -35,6 +108,10 @@
                     }
                     <div class="card-body">
                         <h5 class="card-title text-primary">@item.StoreName</h5>
+                        <p class="card-text">
+                            <strong>@Localizer["Genre"]:</strong><br />
+                            <span class="badge badge-genre @GetGenreClass(item.Genre)">@Localizer[item.Genre.ToString()]</span>
+                        </p>
                         <p class="card-text">
                             <strong>@Localizer["Address"]:</strong><br />
                             <span class="text-muted">@(string.IsNullOrEmpty(item.StoreAddress) ? "N/A" : item.StoreAddress)</span>

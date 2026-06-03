@@ -129,3 +129,47 @@ footer .container {
     justify-content: space-between;
     align-items: center;
 }
+
+/* ジャンルバッジの色分け */
+.badge-genre {
+    color: #fff;
+    padding: 0.5em 0.8em;
+    font-weight: 500;
+    border-radius: 6px;
+    display: inline-block;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+    /* デフォルトカラー */
+    background-color: var(--genre-color, #6c757d);
+}
+
+.badge-genre:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    color: #fff;
+}
+
+.badge-genre.active {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--genre-color, #6c757d);
+    z-index: 1;
+}
+
+.bg-convenience { --genre-color: #0d6efd; } /* Blue */
+.bg-supermarket { --genre-color: #198754; } /* Green */
+.bg-restaurant { --genre-color: #dc3545; } /* Red */
+.bg-cafe { --genre-color: #9c6644; } /* Brown */
+.bg-drugstore { --genre-color: #6f42c1; } /* Purple */
+.bg-shoppingmall { --genre-color: #fd7e14; } /* Orange */
+.bg-gasstation { --genre-color: #ffc107; } /* Yellow */
+.bg-hotel { --genre-color: #0dcaf0; } /* Cyan */
+.bg-other { --genre-color: #6c757d; } /* Grey */
+
+/* 支払い方法バッジの色分け */
+.bg-cash { --genre-color: #28a745; }      /* Green */
+.bg-credit { --genre-color: #007bff; }    /* Blue */
+.bg-qr { --genre-color: #6f42c1; }        /* Purple */
+.bg-prepaid { --genre-color: #fd7e14; }   /* Orange */
+
+

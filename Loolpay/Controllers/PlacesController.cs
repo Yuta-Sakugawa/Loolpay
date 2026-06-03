@@ -17,7 +17,7 @@ public class PlacesController : Controller
     }
 
     // GET: Places
-    public async Task<IActionResult> Index(string searchString)
+    public async Task<IActionResult> Index(string? searchString, StoreGenre? genre, string? payment)
     {
         var stores = from s in _context.Stores
                     select s;
@@ -28,6 +28,38 @@ public class PlacesController : Controller
                                     || (s.StoreAddress != null && s.StoreAddress.Contains(searchString)));
         }
 
+        if (genre.HasValue)
+        {
+            stores = stores.Where(s => s.Genre == genre.Value);
+        }
+
+        if (!string.IsNullOrEmpty(payment))
+        {
+            // LIKE句を使ってDB側で検索します。
+            // 前後にカンマやスペースがあってもマッチするようにパターンを作成します。
+            // データの形式が "Cash, Credit Card, QR Payment" のため、
+            // 「%Cash%」というLIKEで検索します。
+            // 誤判定を防ぐため、完全一致するアイテムをLIKEで囲む工夫が必要です。
+            // カンマ区切りのため、以下のようにパターンマッチを行います。
+            // 1. 先頭: payment + ","
+            // 2. 中間: ", " + payment + ","
+            // 3. 末尾: ", " + payment
+            // 4. 単一: payment
+            
+            // シンプルかつ有効なアプローチとして、LIKE '%payment%' でのフィルタリングを
+            // 改良し、区切り文字を考慮した精度の高いマッチングにします。
+            
+            stores = stores.Where(s => s.Pay != null && 
+                                      (s.Pay == payment || 
+                                       s.Pay.StartsWith(payment + ",") || 
+                                       s.Pay.Contains(", " + payment + ",") || 
+                                       s.Pay.EndsWith(", " + payment)));
+        }
+
+        ViewData["CurrentSearchString"] = searchString;
+        ViewData["CurrentGenre"] = genre;
+        ViewData["CurrentPayment"] = payment;
+        
         return View(await stores.ToListAsync());
     }
 
@@ -58,7 +90,7 @@ public class PlacesController : Controller
     // POST: Places/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("StoreName,StoreAddress,SelectedPaymentMethods")] Store store, IFormFile? imageFile)
+    public async Task<IActionResult> Create([Bind("StoreName,StoreAddress,SelectedPaymentMethods,Genre")] Store store, IFormFile? imageFile)
     {
         if (ModelState.IsValid)
         {
@@ -120,7 +152,7 @@ public class PlacesController : Controller
     // POST: Places/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("StoreId,StoreName,StoreAddress,SelectedPaymentMethods,ImagePath")] Store store, IFormFile? imageFile)
+    public async Task<IActionResult> Edit(int id, [Bind("StoreId,StoreName,StoreAddress,SelectedPaymentMethods,ImagePath,Genre")] Store store, IFormFile? imageFile)
     {
         if (id != store.StoreId)
         {
