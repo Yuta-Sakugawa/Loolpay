@@ -16,7 +16,7 @@ namespace Loolpay
             builder.Services.AddDbContext<Loolpay.Data.ApplicationDbContext>(options =>
                 options.UseSqlite(connectionString));
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");

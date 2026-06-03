@@ -15,17 +15,29 @@
                 </div>
                 <div class="card-body">
                     <form asp-action="Create" enctype="multipart/form-data">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <div class="mb-3">
-                            <label asp-for="StoreName" class="form-label">@Localizer["Store Name"]</label>
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="StoreName" class="form-label">@Localizer["Store Name"]</label>
                             <input asp-for="StoreName" class="form-control" placeholder="@Localizer["Enter store name"]" />
                             <span asp-validation-for="StoreName" class="text-danger"></span>
                         </div>
-                        <div class="mb-3">
+                        <!--<div class="mb-3">
                             <label asp-for="StoreAddress" class="form-label">@Localizer["Address"]</label>
                             <input asp-for="StoreAddress" class="form-control" placeholder="@Localizer["Enter address"]" />
                             <span asp-validation-for="StoreAddress" class="text-danger"></span>
+                        </div>-->
+                        
+                        <div class="mb-3">
+                            <label asp-for="StoreAddress" class="form-label">住所</label>
+                            <input asp-for="StoreAddress"
+                                   id="Address"
+                                   class="form-control mb-2"
+                                   placeholder="住所を入力してください" />
+                            
+                            <!-- 地図をカード内に直接埋め込み -->
+                            <div id="cardMap" style="height:300px;" class="border rounded"></div>
                         </div>
+
                         <div class="mb-3">
                             <label asp-for="Genre" class="form-label">@Localizer["Genre"]</label>
                             <select asp-for="Genre" asp-items="Html.GetEnumSelectList<Loolpay.Models.StoreGenre>()" class="form-control">
@@ -61,6 +73,7 @@
                             <button type="submit" class="btn btn-success">@Localizer["Create Store"]</button>
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>
@@ -68,5 +81,39 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // ページ読み込み時にマップを初期化
+        document.addEventListener('DOMContentLoaded', function () {
+            const map = L.map('cardMap').setView([10.7769, 106.7009], 13);
+            let marker;
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            map.on('click', async function (e) {
+                const lat = e.latlng.lat;
+                const lng = e.latlng.lng;
+
+                if (marker) {
+                    map.removeLayer(marker);
+                }
+
+                marker = L.marker([lat, lng]).addTo(map);
+
+                try {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`);
+                    const data = await response.json();
+                    document.getElementById('Address').value = data.display_name;
+                } catch (err) {
+                    console.error(err);
+                }
+            });
+        });
+    </script>
 }
