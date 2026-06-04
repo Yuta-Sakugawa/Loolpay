@@ -67,4 +67,13 @@
   <data name="Language" xml:space="preserve">
     <value>言語</value>
   </data>
+  <data name="Login" xml:space="preserve">
+    <value>ログイン</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>新規登録</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>ログアウト</value>
+  </data>
 </root>

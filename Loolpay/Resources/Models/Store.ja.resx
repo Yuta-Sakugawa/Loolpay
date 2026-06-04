@@ -64,4 +64,31 @@
   <data name="Address" xml:space="preserve">
     <value>住所</value>
   </data>
+  <data name="ConvenienceStore" xml:space="preserve">
+    <value>コンビニ</value>
+  </data>
+  <data name="Supermarket" xml:space="preserve">
+    <value>スーパー</value>
+  </data>
+  <data name="Restaurant" xml:space="preserve">
+    <value>飲食店</value>
+  </data>
+  <data name="Cafe" xml:space="preserve">
+    <value>カフェ</value>
+  </data>
+  <data name="DrugStore" xml:space="preserve">
+    <value>ドラッグストア</value>
+  </data>
+  <data name="ShoppingMall" xml:space="preserve">
+    <value>ショッピングモール</value>
+  </data>
+  <data name="GasStation" xml:space="preserve">
+    <value>ガソリンスタンド</value>
+  </data>
+  <data name="Hotel" xml:space="preserve">
+    <value>ホテル</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>その他</value>
+  </data>
 </root>

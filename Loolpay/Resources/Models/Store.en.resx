@@ -64,4 +64,31 @@
   <data name="Address" xml:space="preserve">
     <value>Address</value>
   </data>
+  <data name="ConvenienceStore" xml:space="preserve">
+    <value>Convenience Store</value>
+  </data>
+  <data name="Supermarket" xml:space="preserve">
+    <value>Supermarket</value>
+  </data>
+  <data name="Restaurant" xml:space="preserve">
+    <value>Restaurant</value>
+  </data>
+  <data name="Cafe" xml:space="preserve">
+    <value>Cafe</value>
+  </data>
+  <data name="DrugStore" xml:space="preserve">
+    <value>Drug Store</value>
+  </data>
+  <data name="ShoppingMall" xml:space="preserve">
+    <value>Shopping Mall</value>
+  </data>
+  <data name="GasStation" xml:space="preserve">
+    <value>Gas Station</value>
+  </data>
+  <data name="Hotel" xml:space="preserve">
+    <value>Hotel</value>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Other</value>
+  </data>
 </root>

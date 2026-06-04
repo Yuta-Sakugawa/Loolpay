@@ -1,13 +1,15 @@
 @using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc.Localization
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
+@inject IViewLocalizer Localizer
 
 <div class="d-flex align-items-center gap-3">
     @if (SignInManager.IsSignedIn(User))
     {
         <div class="d-flex align-items-center gap-2 ms-2">
             <span class="text-muted small">こんにちは、</span>
-            <a asp-area="Identity" asp-page="/Account/Manage/Index" class="fw-bold text-dark text-decoration-none small hover-underline" title="Manage">
+            <a asp-area="Identity" asp-page="/Account/Manage/Index" class="fw-bold text-dark text-decoration-none small hover-underline" title="Manage">      
                 @(User.Identity?.Name)さん
             </a>
         </div>
@@ -16,17 +18,16 @@
             <i class="bi bi-person-circle text-secondary" style="font-size: 2.2rem; vertical-align: middle;"></i>
         </a>
 
-        <form class="form-inline ms-2" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">Logout</button>
+        <form class="form-inline ms-2" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">  
+            <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3">@Localizer["Logout"]</button>
         </form>
     }
     else
     {
-        <a class="btn btn-sm btn-outline-secondary rounded-pill px-3" asp-area="Identity" asp-page="/Account/Login">Login</a>
-        <a class="btn btn-sm btn-primary rounded-pill px-3" asp-area="Identity" asp-page="/Account/Register">Register</a>
+        <a class="btn btn-sm btn-outline-secondary rounded-pill px-3" asp-area="Identity" asp-page="/Account/Login">@Localizer["Login"]</a>
+        <a class="btn btn-sm btn-primary rounded-pill px-3" asp-area="Identity" asp-page="/Account/Register">@Localizer["Register"]</a>
     }
 </div>
-
 <style>
     .hover-underline:hover {
         text-decoration: underline !important;

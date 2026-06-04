@@ -1,6 +1,8 @@
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.Extensions.Localization
 @using Loolpay.Models
 @inject IViewLocalizer Localizer
+@inject IStringLocalizer<Store> StoreLocalizer
 @model IEnumerable<Loolpay.Models.Store>
 
 @{
@@ -66,7 +68,7 @@
             {
                 <a asp-action="Index" asp-route-genre="@genre" asp-route-searchString="@searchString" asp-route-payment="@currentPayment"
                    class="badge badge-genre @GetGenreClass(genre) @(currentGenre == genre ? "active" : "")">
-                    @Localizer[genre.ToString()]
+                    @StoreLocalizer[genre.ToString()]
                 </a>
             }
         </div>
@@ -96,7 +98,6 @@
     <div class="row">
         @foreach (var item in Model)
         {
-            @* (店舗表示部分は変更なしのため省略して元の内容を維持) *@
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                     @if (!string.IsNullOrEmpty(item.ImagePath))
@@ -113,7 +114,7 @@
                         <h5 class="card-title text-primary">@item.StoreName</h5>
                         <p class="card-text">
                             <strong>@Localizer["Genre"]:</strong><br />
-                            <span class="badge badge-genre @GetGenreClass(item.Genre)">@Localizer[item.Genre.ToString()]</span>
+                            <span class="badge badge-genre @GetGenreClass(item.Genre)">@StoreLocalizer[item.Genre.ToString()]</span>
                         </p>
                         <p class="card-text">
                             <strong>@Localizer["Address"]:</strong><br />
