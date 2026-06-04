@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"] = "店舗人気ランキング";
+}
+
+<h1>店舗人気ランキング</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>順位</th>
+            <th>店舗名</th>
+            <th>閲覧数</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int rank = 1;
+        }
+        @foreach (var item in ViewBag.Rankings)
+        {
+            <tr>
+                <td>@rank</td>
+                <td>@item.StoreName</td>
+                <td>@item.ViewCount</td>
+            </tr>
+            rank++;
+        }
+    </tbody>
+</table>

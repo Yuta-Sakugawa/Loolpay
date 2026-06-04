@@ -12,5 +12,6 @@ namespace Loolpay.Data
         }
 
         public DbSet<Store> Stores { get; set; }
+        public DbSet<StoreViewLog> StoreViewLogs { get; set; }
     }
 }
