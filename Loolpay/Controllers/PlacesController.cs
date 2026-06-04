@@ -64,6 +64,19 @@ public class PlacesController : Controller
         ViewData["CurrentGenre"] = genre;
         ViewData["CurrentPayment"] = payment;
         
+        var user = await _userManager.GetUserAsync(User);
+        if (user != null)
+        {
+            ViewBag.FavoriteStoreIds = await _context.Favorites
+                .Where(f => f.UserId == user.Id)
+                .Select(f => f.StoreId)
+                .ToListAsync();
+        }
+        else
+        {
+            ViewBag.FavoriteStoreIds = new List<int>();
+        }
+
         return View(await stores.ToListAsync());
     }
 
@@ -82,6 +95,17 @@ public class PlacesController : Controller
             return NotFound();
         }
 
+<<<<<<< HEAD
+        var user = await _userManager.GetUserAsync(User);
+        if (user != null)
+        {
+            ViewBag.IsFavorite = await _context.Favorites
+                .AnyAsync(f => f.UserId == user.Id && f.StoreId == id);
+        }
+        else
+        {
+            ViewBag.IsFavorite = false;
+=======
         // ログの記録
         var userId = _userManager.GetUserId(User);
         if (userId != null)
@@ -94,6 +118,7 @@ public class PlacesController : Controller
             };
             _context.StoreViewLogs.Add(log);
             await _context.SaveChangesAsync();
+>>>>>>> main
         }
 
         return View(store);
