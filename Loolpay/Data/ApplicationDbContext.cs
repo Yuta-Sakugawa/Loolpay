@@ -12,5 +12,14 @@ namespace Loolpay.Data
         }
 
         public DbSet<Store> Stores { get; set; }
+        public DbSet<Favorite> Favorites { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Favorite>()
+                .HasKey(f => new { f.UserId, f.StoreId });
+        }
     }
 }

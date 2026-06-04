@@ -13,6 +13,7 @@
     
     // 全店舗数（検索のみ反映）
     var totalCount = Model.Count();
+    var favoriteStoreIds = ViewBag.FavoriteStoreIds as List<int> ?? new List<int>();
 }
 
 @{
@@ -100,16 +101,26 @@
         {
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
-                    @if (!string.IsNullOrEmpty(item.ImagePath))
-                    {
-                        <img src="~/images/stores/@item.ImagePath" class="card-img-top" style="height: 200px; object-fit: cover;" alt="@item.StoreName" />
-                    }
-                    else
-                    {
-                        <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                            <span class="text-muted small">@Localizer["No photo"]</span>
-                        </div>
-                    }
+                    <div class="position-relative">
+                        @if (!string.IsNullOrEmpty(item.ImagePath))
+                        {
+                            <img src="~/images/stores/@item.ImagePath" class="card-img-top" style="height: 200px; object-fit: cover;" alt="@item.StoreName" />
+                        }
+                        else
+                        {
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <span class="text-muted small">@Localizer["No photo"]</span>
+                            </div>
+                        }
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            var isFavorite = favoriteStoreIds.Contains(item.StoreId);
+                            <button type="button" class="btn btn-link position-absolute top-0 end-0 p-2"
+                                    onclick="toggleFavorite(@item.StoreId, this)">
+                                <i class="bi @(isFavorite ? "bi-heart-fill text-danger" : "bi-heart") fs-4"></i>
+                            </button>
+                        }
+                    </div>
                     <div class="card-body">
                         <h5 class="card-title text-primary">@item.StoreName</h5>
                         <p class="card-text">

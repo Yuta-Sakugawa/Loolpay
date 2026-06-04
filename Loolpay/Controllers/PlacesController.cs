@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Loolpay.Data;
 using Loolpay.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Loolpay.Controllers;
 
@@ -10,11 +11,13 @@ public class PlacesController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly IWebHostEnvironment _hostEnvironment;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public PlacesController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
+    public PlacesController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment, UserManager<ApplicationUser> userManager)
     {
         _context = context;
         _hostEnvironment = hostEnvironment;
+        _userManager = userManager;
     }
 
     // GET: Places
@@ -61,6 +64,19 @@ public class PlacesController : Controller
         ViewData["CurrentGenre"] = genre;
         ViewData["CurrentPayment"] = payment;
         
+        var user = await _userManager.GetUserAsync(User);
+        if (user != null)
+        {
+            ViewBag.FavoriteStoreIds = await _context.Favorites
+                .Where(f => f.UserId == user.Id)
+                .Select(f => f.StoreId)
+                .ToListAsync();
+        }
+        else
+        {
+            ViewBag.FavoriteStoreIds = new List<int>();
+        }
+
         return View(await stores.ToListAsync());
     }
 
@@ -77,6 +93,17 @@ public class PlacesController : Controller
         if (store == null)
         {
             return NotFound();
+        }
+
+        var user = await _userManager.GetUserAsync(User);
+        if (user != null)
+        {
+            ViewBag.IsFavorite = await _context.Favorites
+                .AnyAsync(f => f.UserId == user.Id && f.StoreId == id);
+        }
+        else
+        {
+            ViewBag.IsFavorite = false;
         }
 
         return View(store);

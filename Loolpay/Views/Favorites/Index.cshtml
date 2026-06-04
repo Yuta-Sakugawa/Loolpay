@@ -1,0 +1,46 @@
+@model IEnumerable<Loolpay.Models.Favorite>
+
+@{
+    ViewData["Title"] = "お気に入り一覧";
+}
+
+<div class="container mt-4">
+    <h1>お気に入り店舗</h1>
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="col-12">
+                <div class="alert alert-info">お気に入りの店舗はありません。</div>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        @if (!string.IsNullOrEmpty(item.Store.ImagePath))
+                        {
+                            <img src="~/images/stores/@item.Store.ImagePath" class="card-img-top" style="height: 200px; object-fit: cover;" alt="@item.Store.StoreName" />
+                        }
+                        else
+                        {
+                             <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <span class="text-muted small">画像なし</span>
+                            </div>
+                        }
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">@item.Store.StoreName</h5>
+                            <p class="card-text">
+                                <strong>住所:</strong> @(string.IsNullOrEmpty(item.Store.StoreAddress) ? "N/A" : item.Store.StoreAddress)
+                            </p>
+                        </div>
+                        <div class="card-footer bg-transparent border-top-0">
+                            <a asp-controller="Places" asp-action="Details" asp-route-id="@item.StoreId" class="btn btn-outline-secondary btn-sm">詳細を見る</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
