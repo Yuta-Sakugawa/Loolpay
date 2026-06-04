@@ -7,7 +7,7 @@ namespace Loolpay
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +17,7 @@ namespace Loolpay
                 options.UseSqlite(connectionString));
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
@@ -37,11 +38,33 @@ namespace Loolpay
 
             app.UseRequestLocalization(localizationOptions);
 
-            // Auto-migrate database
+            // Auto-migrate database & Seed Admin
             using (var scope = app.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<Loolpay.Data.ApplicationDbContext>();
                 context.Database.Migrate();
+
+                // Role/User Seeding
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                
+                if (!await roleManager.RoleExistsAsync("admin"))
+                {
+                    await roleManager.CreateAsync(new IdentityRole("admin"));
+                }
+                
+                var adminEmail = "admin@icloud.com";
+                var adminUser = await userManager.FindByEmailAsync(adminEmail);
+                if (adminUser == null)
+                {
+                    adminUser = new ApplicationUser { UserName = adminEmail, Email = adminEmail, EmailConfirmed = true };
+                    await userManager.CreateAsync(adminUser, "Admin777!");
+                    await userManager.AddToRoleAsync(adminUser, "admin");
+                }
+                else if (!await userManager.IsInRoleAsync(adminUser, "admin"))
+                {
+                    await userManager.AddToRoleAsync(adminUser, "admin");
+                }
 
                 // Seed Stores
                 if (!context.Stores.Any())
@@ -71,7 +94,7 @@ namespace Loolpay
                 pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
 
-            app.Run();
+            await app.RunAsync();
         }
     }
 }

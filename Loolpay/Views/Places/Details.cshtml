@@ -36,7 +36,10 @@
                         <dd class="col-sm-9">@Localizer[Model.Genre.ToString()]</dd>
 
                         <dt class="col-sm-3">@Localizer["Address"]</dt>
-                        <dd class="col-sm-9">@Html.DisplayFor(model => model.StoreAddress)</dd>
+                        <dd class="col-sm-9">
+                            @Html.DisplayFor(model => model.StoreAddress)
+                            <div id="map" style="height:300px;" class="border rounded mt-2"></div>
+                        </dd>
 
                         <dt class="col-sm-3">@Localizer["Payment Methods"]</dt>
                         <dd class="col-sm-9">
@@ -59,9 +62,75 @@
                 </div>
                 <div class="card-footer d-flex justify-content-end gap-2">
                     <a asp-action="Index" class="btn btn-secondary">@Localizer["Back to List"]</a>
-                    <a asp-action="Edit" asp-route-id="@Model.StoreId" class="btn btn-primary">@Localizer["Edit"]</a>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@Model.StoreId" class="btn btn-primary">@Localizer["Edit"]</a>
+                    }
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        console.log("Details script loaded");
+        document.addEventListener('DOMContentLoaded', async function () {
+            console.log("DOMContentLoaded fired");
+            const address = '@Model.StoreAddress';
+            console.log("Address being used:", address);
+            
+            const mapContainer = document.getElementById('map');
+            if (!mapContainer) {
+                console.error("Map container not found!");
+                return;
+            }
+            if (!address) {
+                console.log("No address provided");
+                return;
+            }
+
+            // 確実なマーカーアイコン設定
+            const customIcon = L.icon({
+                iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+                iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+            console.log("Icon defined");
+
+            const map = L.map('map').setView([0, 0], 13);
+            console.log("Map initialized");
+            
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+            console.log("Tile layer added");
+
+            try {
+                console.log("Fetching coordinates...");
+                const response = await fetch(`https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&format=json&limit=1`);
+                const data = await response.json();
+                console.log("Response received:", data);
+                
+                if (data.length > 0) {
+                    const lat = data[0].lat;
+                    const lon = data[0].lon;
+                    console.log("Coordinates found:", lat, lon);
+                    map.setView([lat, lon], 13);
+                    
+                    // アイコンを指定してマーカー作成
+                    const marker = L.marker([lat, lon], { icon: customIcon }).addTo(map).bindPopup('@Model.StoreName').openPopup();
+                    console.log("Marker added");
+                } else {
+                    console.warn("No coordinates found for address:", address);
+                }
+            } catch (err) {
+                console.error("Map error during fetch/marker:", err);
+            }
+        });
+    </script>
+}
