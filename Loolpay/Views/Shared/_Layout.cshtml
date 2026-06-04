@@ -101,9 +101,21 @@
                     <a class="nav-link" asp-area="" asp-controller="Places" asp-action="Index">
                         <i class="bi bi-geo-alt"></i> @Localizer["Stores"]
                     </a>
+<<<<<<< HEAD
                     <a class="nav-link" asp-area="" asp-controller="Favorites" asp-action="Index">
                         <i class="bi bi-heart"></i> お気に入り
                     </a>
+=======
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a class="nav-link" asp-controller="Admin" asp-action="Logs">
+                            <i class="bi bi-file-earmark-text"></i> 閲覧ログ
+                        </a>
+                        <a class="nav-link" asp-controller="Admin" asp-action="Rankings">
+                            <i class="bi bi-graph-up"></i> 人気ランキング
+                        </a>
+                    }
+>>>>>>> main
                     <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">
                         <i class="bi bi-shield-lock"></i> @Localizer["Privacy"]
                     </a>

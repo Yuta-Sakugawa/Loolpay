@@ -30,6 +30,19 @@
         _ => "bg-other"
     };
 
+    string GetGenreIcon(Loolpay.Models.StoreGenre genre) => genre switch
+    {
+        Loolpay.Models.StoreGenre.ConvenienceStore => "bi-shop",
+        Loolpay.Models.StoreGenre.Supermarket => "bi-basket",
+        Loolpay.Models.StoreGenre.Restaurant => "bi-cup-hot",
+        Loolpay.Models.StoreGenre.Cafe => "bi-cup-fill",
+        Loolpay.Models.StoreGenre.DrugStore => "bi-capsule",
+        Loolpay.Models.StoreGenre.ShoppingMall => "bi-bag",
+        Loolpay.Models.StoreGenre.GasStation => "bi-fuel-pump",
+        Loolpay.Models.StoreGenre.Hotel => "bi-house",
+        _ => "bi-tag"
+    };
+
     string GetPaymentClass(string payment) => payment switch
     {
         "Cash" => "bg-cash",
@@ -37,6 +50,15 @@
         "QR Payment" => "bg-qr",
         "Prepaid Card" => "bg-prepaid",
         _ => "bg-other"
+    };
+
+    string GetPaymentIcon(string payment) => payment switch
+    {
+        "Cash" => "bi-cash",
+        "Credit Card" => "bi-credit-card",
+        "QR Payment" => "bi-qr-code-scan",
+        "Prepaid Card" => "bi-card-list",
+        _ => "bi-wallet2"
     };
 }
 
@@ -48,11 +70,11 @@
                 <input type="hidden" name="genre" value="@currentGenre" />
                 <input type="hidden" name="payment" value="@currentPayment" />
                 <input type="text" name="SearchString" value="@searchString" class="form-control me-2" placeholder="@Localizer["Search stores..."]" />
-                <button type="submit" class="btn btn-outline-primary">@Localizer["Search"]</button>
+                <button type="submit" class="btn btn-outline-primary px-4"><i class="bi bi-search"></i> @Localizer["Search"]</button>
             </form>
             @if (User.IsInRole("admin"))
             {
-                <a asp-action="Create" class="btn btn-success">@Localizer["Add New Store"]</a>
+                <a asp-action="Create" class="btn btn-success"><i class="bi bi-plus-lg"></i> @Localizer["Add New Store"]</a>
             }
         </div>
     </div>
@@ -63,13 +85,13 @@
         <div class="d-flex flex-wrap gap-2">
             <a asp-action="Index" asp-route-searchString="@searchString" asp-route-payment="@currentPayment"
                class="badge badge-genre bg-other @(!currentGenre.HasValue ? "active" : "")">
-                @Localizer["All"]
+                <i class="bi bi-list"></i> @Localizer["All"]
             </a>
             @foreach (StoreGenre genre in Enum.GetValues(typeof(StoreGenre)))
             {
                 <a asp-action="Index" asp-route-genre="@genre" asp-route-searchString="@searchString" asp-route-payment="@currentPayment"
                    class="badge badge-genre @GetGenreClass(genre) @(currentGenre == genre ? "active" : "")">
-                    @StoreLocalizer[genre.ToString()]
+                    <i class="bi @GetGenreIcon(genre)"></i> @StoreLocalizer[genre.ToString()]
                 </a>
             }
         </div>
@@ -84,13 +106,13 @@
         <div class="d-flex flex-wrap gap-2">
             <a asp-action="Index" asp-route-searchString="@searchString" asp-route-genre="@currentGenre"
                class="badge badge-genre bg-other @(string.IsNullOrEmpty(currentPayment) ? "active" : "")">
-                @Localizer["All"]
+                <i class="bi bi-list"></i> @Localizer["All"]
             </a>
             @foreach (var p in paymentMethods)
             {
                 <a asp-action="Index" asp-route-payment="@p" asp-route-genre="@currentGenre" asp-route-searchString="@searchString"
                    class="badge badge-genre @GetPaymentClass(p) @(currentPayment == p ? "active" : "")">
-                    @Localizer[p]
+                    <i class="bi @GetPaymentIcon(p)"></i> @Localizer[p]
                 </a>
             }
         </div>
@@ -124,21 +146,21 @@
                     <div class="card-body">
                         <h5 class="card-title text-primary">@item.StoreName</h5>
                         <p class="card-text">
-                            <strong>@Localizer["Genre"]:</strong><br />
-                            <span class="badge badge-genre @GetGenreClass(item.Genre)">@StoreLocalizer[item.Genre.ToString()]</span>
+                            <strong><i class="bi bi-tag"></i> @Localizer["Genre"]:</strong><br />
+                            <span class="badge badge-genre @GetGenreClass(item.Genre)"><i class="bi @GetGenreIcon(item.Genre)"></i> @StoreLocalizer[item.Genre.ToString()]</span>
                         </p>
                         <p class="card-text">
-                            <strong>@Localizer["Address"]:</strong><br />
+                            <strong><i class="bi bi-geo-alt"></i> @Localizer["Address"]:</strong><br />
                             <span class="text-muted">@(string.IsNullOrEmpty(item.StoreAddress) ? "N/A" : item.StoreAddress)</span>
                         </p>
                         <p class="card-text">
-                            <strong>@Localizer["Payments"]:</strong><br />
+                            <strong><i class="bi bi-wallet2"></i> @Localizer["Payments"]:</strong><br />
                             <div class="store-card-payments">
                                 @if (!string.IsNullOrEmpty(item.Pay))
                                 {
                                     @foreach (var payment in item.Pay.Split(',', StringSplitOptions.RemoveEmptyEntries))
                                     {
-                                        <span class="badge bg-light text-primary border border-primary">@Localizer[payment.Trim()]</span>
+                                        <span class="badge bg-light text-primary border border-primary"><i class="bi @GetPaymentIcon(payment.Trim())"></i> @Localizer[payment.Trim()]</span>
                                     }
                                 }
                                 else
@@ -148,16 +170,16 @@
                             </div>
                         </p>
                         <p class="card-text">
-                            <small class="text-muted">@Localizer["Last Updated"]: @item.LastUpdated.ToString("yyyy/MM/dd HH:mm")</small>
+                            <small class="text-muted"><i class="bi bi-clock"></i> @Localizer["Last Updated"]: @item.LastUpdated.ToString("yyyy/MM/dd HH:mm")</small>
                         </p>
                     </div>
                     <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
-                        <a asp-action="Details" asp-route-id="@item.StoreId" class="btn btn-outline-secondary btn-sm">@Localizer["Details"]</a>
+                        <a asp-action="Details" asp-route-id="@item.StoreId" class="btn btn-outline-secondary btn-sm"><i class="bi bi-info-circle"></i> @Localizer["Details"]</a>
                         @if (User.IsInRole("admin"))
                         {
                             <div class="btn-group">
-                                <a asp-action="Edit" asp-route-id="@item.StoreId" class="btn btn-primary btn-sm">@Localizer["Edit"]</a>
-                                <a asp-action="Delete" asp-route-id="@item.StoreId" class="btn btn-danger btn-sm">@Localizer["Delete"]</a>
+                                <a asp-action="Edit" asp-route-id="@item.StoreId" class="btn btn-primary btn-sm"><i class="bi bi-pencil"></i> @Localizer["Edit"]</a>
+                                <a asp-action="Delete" asp-route-id="@item.StoreId" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i> @Localizer["Delete"]</a>
                             </div>
                         }
                     </div>
@@ -168,6 +190,6 @@
 
     @if (!Model.Any())
     {
-        <div class="alert alert-info">@Localizer["No stores found."]</div>
+        <div class="alert alert-info"><i class="bi bi-info-circle"></i> @Localizer["No stores found."]</div>
     }
 </div>

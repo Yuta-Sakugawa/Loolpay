@@ -95,6 +95,7 @@ public class PlacesController : Controller
             return NotFound();
         }
 
+<<<<<<< HEAD
         var user = await _userManager.GetUserAsync(User);
         if (user != null)
         {
@@ -104,6 +105,20 @@ public class PlacesController : Controller
         else
         {
             ViewBag.IsFavorite = false;
+=======
+        // ログの記録
+        var userId = _userManager.GetUserId(User);
+        if (userId != null)
+        {
+            var log = new StoreViewLog
+            {
+                UserId = userId,
+                StoreId = store.StoreId,
+                ViewedAt = DateTime.Now
+            };
+            _context.StoreViewLogs.Add(log);
+            await _context.SaveChangesAsync();
+>>>>>>> main
         }
 
         return View(store);
