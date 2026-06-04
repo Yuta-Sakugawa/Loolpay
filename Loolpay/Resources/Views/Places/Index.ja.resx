@@ -109,7 +109,16 @@
   <data name="QR Payment" xml:space="preserve">
     <value>QR決済</value>
   </data>
-  <data name="Prepaid Card" xml:space="preserve">
-    <value>プリペイドカード</value>
+  <data name="Genre Filter" xml:space="preserve">
+    <value>ジャンルフィルタ</value>
+  </data>
+  <data name="Payment Filter" xml:space="preserve">
+    <value>支払い方法フィルタ</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>すべて</value>
+  </data>
+  <data name="Genre" xml:space="preserve">
+    <value>ジャンル</value>
   </data>
 </root>

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Loolpay.Data;
@@ -82,6 +83,7 @@ public class PlacesController : Controller
     }
 
     // GET: Places/Create
+    [Authorize(Roles = "admin")]
     public IActionResult Create()
     {
         return View();
@@ -90,6 +92,7 @@ public class PlacesController : Controller
     // POST: Places/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Create([Bind("StoreName,StoreAddress,SelectedPaymentMethods,Genre")] Store store, IFormFile? imageFile)
     {
         if (ModelState.IsValid)
@@ -128,6 +131,7 @@ public class PlacesController : Controller
     }
 
     // GET: Places/Edit/5
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null)
@@ -152,6 +156,7 @@ public class PlacesController : Controller
     // POST: Places/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Edit(int id, [Bind("StoreId,StoreName,StoreAddress,SelectedPaymentMethods,ImagePath,Genre")] Store store, IFormFile? imageFile)
     {
         if (id != store.StoreId)
@@ -223,6 +228,7 @@ public class PlacesController : Controller
     }
 
     // GET: Places/Delete/5
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null)
@@ -243,6 +249,7 @@ public class PlacesController : Controller
     // POST: Places/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
+    [Authorize(Roles = "admin")]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
         var store = await _context.Stores.FindAsync(id);

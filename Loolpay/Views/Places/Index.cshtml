@@ -47,7 +47,10 @@
                 <input type="text" name="SearchString" value="@searchString" class="form-control me-2" placeholder="@Localizer["Search stores..."]" />
                 <button type="submit" class="btn btn-outline-primary">@Localizer["Search"]</button>
             </form>
-            <a asp-action="Create" class="btn btn-success">@Localizer["Add New Store"]</a>
+            @if (User.IsInRole("admin"))
+            {
+                <a asp-action="Create" class="btn btn-success">@Localizer["Add New Store"]</a>
+            }
         </div>
     </div>
 
@@ -138,10 +141,13 @@
                     </div>
                     <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
                         <a asp-action="Details" asp-route-id="@item.StoreId" class="btn btn-outline-secondary btn-sm">@Localizer["Details"]</a>
-                        <div class="btn-group">
-                            <a asp-action="Edit" asp-route-id="@item.StoreId" class="btn btn-primary btn-sm">@Localizer["Edit"]</a>
-                            <a asp-action="Delete" asp-route-id="@item.StoreId" class="btn btn-danger btn-sm">@Localizer["Delete"]</a>
-                        </div>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <div class="btn-group">
+                                <a asp-action="Edit" asp-route-id="@item.StoreId" class="btn btn-primary btn-sm">@Localizer["Edit"]</a>
+                                <a asp-action="Delete" asp-route-id="@item.StoreId" class="btn btn-danger btn-sm">@Localizer["Delete"]</a>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
