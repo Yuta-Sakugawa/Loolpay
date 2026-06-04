@@ -1,0 +1,27 @@
+@model IEnumerable<Loolpay.Models.StoreViewLog>
+
+@{
+    ViewData["Title"] = "閲覧ログ";
+}
+
+<h1>閲覧ログ一覧</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ユーザー</th>
+            <th>店舗</th>
+            <th>閲覧日時</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model)
+        {
+            <tr>
+                <td>@log.User?.UserName</td>
+                <td>@log.Store?.StoreName</td>
+                <td>@log.ViewedAt.ToString("yyyy/MM/dd HH:mm:ss")</td>
+            </tr>
+        }
+    </tbody>
+</table>

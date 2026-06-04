@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Loolpay.Data;
 using Loolpay.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace Loolpay.Controllers;
 
@@ -10,11 +11,13 @@ public class PlacesController : Controller
 {
     private readonly ApplicationDbContext _context;
     private readonly IWebHostEnvironment _hostEnvironment;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-    public PlacesController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment)
+    public PlacesController(ApplicationDbContext context, IWebHostEnvironment hostEnvironment, UserManager<ApplicationUser> userManager)
     {
         _context = context;
         _hostEnvironment = hostEnvironment;
+        _userManager = userManager;
     }
 
     // GET: Places
@@ -77,6 +80,20 @@ public class PlacesController : Controller
         if (store == null)
         {
             return NotFound();
+        }
+
+        // ログの記録
+        var userId = _userManager.GetUserId(User);
+        if (userId != null)
+        {
+            var log = new StoreViewLog
+            {
+                UserId = userId,
+                StoreId = store.StoreId,
+                ViewedAt = DateTime.Now
+            };
+            _context.StoreViewLogs.Add(log);
+            await _context.SaveChangesAsync();
         }
 
         return View(store);
